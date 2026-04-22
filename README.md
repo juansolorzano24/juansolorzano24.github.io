@@ -1,2 +1,2 @@
-# geovisor_ps.github.io
+# juansolorzano24.github.io
 Geovisor
