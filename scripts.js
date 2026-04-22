@@ -31,10 +31,7 @@ baseLayers.imagery.addTo(map);
 // Agrega nuevas capas aquí
 // =============================
 var capasConfig = [
-    { key: 'comunas', nombre: 'Comunas', url: 'data/comunas.json' },
-    { key: 'municipios', nombre: 'Municipios', url: 'data/Municipios.json' },
-    { key: 'Departamentos', nombre: 'Departamentos', url: 'data/Departamentos.geojson' }
-];
+    { key: 'comunas', nombre: 'Comunas', url: 'data/comunas.json' }
 
 // Almacenes generales
 var capasGeoJSON = {};   // guarda los datos GeoJSON
