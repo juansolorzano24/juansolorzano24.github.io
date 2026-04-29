@@ -1,114 +1,47 @@
-🌍 Geovisor Medellín 
+# Geovisor Medellín
 
-Geovisor web interactivo desarrollado con Leaflet.js para la visualización, análisis y exploración de datos espaciales en la ciudad de Medellín. Este visor integra herramientas avanzadas de consulta, análisis, carga de datos y visualización geográfica en una sola interfaz moderna.
+Es una aplicación de visualización y análisis espacial de alto rendimiento basada en tecnologías web modernas. Este geovisor ha sido diseñado para profesionales de los Sistemas de Información Geográfica (SIG), geociencias y ciencia de datos que requieren una herramienta ligera pero potente para la exploración de datos vectoriales, análisis estadístico y gestión de información territorial en tiempo real.
 
-🚀 Características Principales
-Visualización de datos geoespaciales en formato GeoJSON
-Gestión de múltiples capas vectoriales
-Herramientas de dibujo y medición (distancias, áreas)
-Tabla de atributos interactiva con filtrado
-Dashboard dinámico con métricas y gráficos
-Carga de archivos locales (GeoJSON, KML, GPX, Shapefile)
-Exportación de datos (CSV y Shapefile)
-Exportación del mapa como imagen (PNG)
-Búsqueda geográfica (coordenadas o texto)
-Modo oscuro / claro
-Mini mapa y control de pantalla completa
-🧱 Estructura del Proyecto
-geovisor-medellin/
-│
-├── index.html
-├── styles.css
-├── scripts.js
-├── data/
-│   └── comunas.json
-🗺️ Tecnologías Utilizadas
-Leaflet.js
-Leaflet Draw
-Leaflet Measure
-Chart.js
-SweetAlert2
-shp.js
-shp-write
-html2canvas
-⚙️ Funcionalidades Técnicas
-🔹 Visualización de capas
+![Licencia](https://img.shields.io/badge/Licencia-MIT-green)
+![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-blue)
+![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-yellow)
 
-El sistema permite cargar y visualizar capas vectoriales dinámicamente mediante archivos GeoJSON.
+## 🚀 Características Principales
 
-const capasConfig = [
-  { key: 'comunas', nombre: 'Comunas', url: 'data/comunas.json' }
-];
-🔹 Herramientas de dibujo y análisis
+### 🗺️ Visualización e Interacción
+- **Múltiples Mapas Base:** Alternancia entre Esri Imagery, OSM Light y Carto Dark.
+- **Sincronización Bidireccional:** Interacción fluida entre el mapa y la tabla de atributos; al seleccionar una entidad en el mapa, se resalta en la tabla y viceversa con auto-scroll.
+- **Popups Profesionales:** Ventanas emergentes con diseño limpio, tablas de atributos iteradas dinámicamente y botones de acción rápida (Zoom a la entidad, Copiar JSON).
+- **Modo Oscuro/Claro:** Interfaz adaptativa que ajusta tanto los colores de la UI (Glassmorphism) como el mapa base para reducir la fatiga visual.
 
-El visor permite crear geometrías directamente sobre el mapa (puntos, líneas, polígonos, rectángulos y círculos). Cada geometría calcula automáticamente área, perímetro y longitud.
+### 📊 Análisis y Datos
+- **Dashboard Interactivo:** Generación automática de KPIs (Total de entidades, cantidad de atributos) y gráficos estadísticos dinámicos (Doughnut / Bar Charts) mediante **Chart.js**, detectando automáticamente variables categóricas.
+- **Tabla de Atributos Pro:** Soporte para filtrado en tiempo real, búsqueda avanzada y selección de registros vinculados a la geometría.
+- **Buscador Geocodificador:** Integración con la API de Nominatim (OpenStreetMap) orientada a Colombia para búsqueda de direcciones con autocompletado y soporte nativo para búsqueda por coordenadas decimales (Lat, Lon).
 
-🔹 Tabla de atributos
+### 🛠️ Herramientas GIS Espaciales
+- **Carga Local Multi-formato (Drag & Drop):** Ingesta *Client-Side* de archivos **GeoJSON, KML, GPX** y **Shapefile (comprimido en .zip)**.
+- **Geometría y Medición Avanzada:** Herramientas para crear geometrías (puntos, líneas, polígonos) con cálculo automático y preciso de áreas geodésicas (m²) y longitudes (m).
+- **Exportación de Datos Espaciales:** - Descarga de atributos en **CSV** (Codificación UTF-8 con BOM para compatibilidad total con Excel).
+  - Exportación de capas vectoriales a **Shapefile (.zip)** directamente desde el navegador, saltando restricciones de red mediante Blobs.
+  - Captura de pantalla del lienzo del mapa (bypass CORS) en formato **PNG** de alta calidad.
 
-Visualización tabular de entidades con filtrado en tiempo real, selección de registros y exportación a CSV o SHP.
+## 🛠️ Stack Tecnológico
 
-🔹 Dashboard
+El proyecto está construido bajo el paradigma de **Vanilla JavaScript**, priorizando el rendimiento, la modularidad y la ausencia de frameworks pesados:
 
-Visualización de KPIs como número total de entidades, cantidad de atributos y gráficos dinámicos generados con Chart.js.
+- **Motor de Mapas:** [Leaflet.js](https://leafletjs.com/)
+- **Interfaz de Usuario:** HTML5, CSS3 (CSS Variables, Flexbox/Grid), FontAwesome 6.
+- **Visualización de Datos:** [Chart.js](https://www.chartjs.org/)
+- **Procesamiento Espacial en Navegador:** - `shpjs` (Lectura y parseo de Shapefiles en formato .zip).
+  - `shp-write` (Escritura y empaquetado de Shapefiles).
+  - `togeojson` (Conversión de XML/KML/GPX a GeoJSON).
+- **Utilidades:** SweetAlert2 (Notificaciones asíncronas), html2canvas (Renderizado DOM a Canvas).
 
-🔹 Carga de datos locales
+## 📂 Estructura del Proyecto
 
-Permite cargar archivos directamente en el visor mediante drag & drop.
-
-Formatos soportados:
-
-.geojson
-.json
-.kml
-.gpx
-.zip (Shapefile)
-🔹 Exportaciones
-
-Exportación del mapa como imagen PNG y exportación de datos en formatos CSV y Shapefile.
-
-🧭 Controles del Mapa
-Zoom personalizado
-Botón de "Home" (reset de vista)
-Pantalla completa
-Mini mapa
-Coordenadas en tiempo real
-🔍 Búsqueda
-
-Permite buscar coordenadas (lat, lon) y ubicaciones (según implementación).
-
-🌗 Modo Oscuro
-
-Cambio dinámico entre tema claro y oscuro.
-
-🧪 Estado del Proyecto
-
-✔ Funcional
-✔ Escalable
-✔ Modular
-
-Mejoras futuras:
-
-Zoom automático desde tabla de atributos
-Integración con servicios WMS/WFS
-Persistencia de capas cargadas
-Optimización para grandes volúmenes de datos
-📦 Instalación y Uso
-Clonar repositorio:
-git clone https://github.com/tu-usuario/geovisor-medellin.git
-Ingresar al proyecto:
-cd geovisor-medellin
-Ejecutar en servidor local:
-npx serve
-Abrir en navegador:
-http://localhost:3000
-📌 Recomendaciones
-Ejecutar en servidor local para evitar problemas de CORS
-Usar archivos .zip válidos para shapefiles
-Mantener la estructura de carpetas
-👨‍💻 Autor
-
-Proyecto desarrollado para análisis geoespacial y visualización SIG.
-
-📄 Licencia
-
-Uso académico y profesional. Libre para modificación y adaptación.
+```text
+├── index.html          # Estructura principal, UI modular y carga de librerías CDN
+├── styles.css          # Estilos avanzados, diseño responsive y variables de modo oscuro
+├── scripts.js          # Lógica central (Estado, Controladores GIS, Listeners, Exportación)
+└── data/               # Directorio para capas estáticas iniciales (ej. comunas.json)
