@@ -1,6 +1,6 @@
 # Geovisor Medellín
 
-Link de acceso al geovisor: juansolorzano24.github.io
+Link de acceso al geovisor: (https://juansolorzano24.github.io)
 
 Este geovisor es una aplicación de visualización y análisis espacial de alto rendimiento basada en tecnologías web modernas. Este geovisor ha sido diseñado para profesionales de los Sistemas de Información Geográfica (SIG), geociencias y ciencia de datos que requieren una herramienta ligera pero potente para la exploración de datos vectoriales, análisis estadístico y gestión de información territorial en tiempo real.
 
