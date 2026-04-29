@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geovisor Medellín</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw/dist/leaflet.draw.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/3.0.0/Control.FullScreen.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.min.css" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <nav id="topToolbar" class="glass-panel">
+        <div class="toolbar-brand">
+            <i class="fa-solid fa-earth-americas"></i> Geovisor Medellín
+        </div>
+        
+        <div class="search-container">
+            <input type="text" id="globalSearch" placeholder="Buscar lugares, lat, lon..." autocomplete="off">
+            <button id="btnSearch"><i class="fa-solid fa-search"></i></button>
+            <ul id="searchSuggestions" class="suggestions-list hidden"></ul>
+        </div>
+
+        <div class="toolbar-tools">
+            <button class="tool-btn" id="btnToggleTheme" title="Alternar Tema Oscuro/Claro"><i class="fa-solid fa-moon"></i></button>
+            <button class="tool-btn" id="btnClearSelection" title="Limpiar Selección"><i class="fa-solid fa-eraser"></i></button>
+            <button class="tool-btn" id="btnExportMap" title="Exportar Mapa a PNG"><i class="fa-solid fa-camera"></i></button>
+        </div>
+    </nav>
+
+    <div id="app">
+        <div id="loader" class="loader-overlay hidden">
+            <div class="spinner"></div>
+            <span id="loaderText">Procesando datos espaciales...</span>
+        </div>
+
+        <div id="map"></div>
+        <div id="coordsDisplay" class="glass-panel text-small">Lat: 0.00000 | Lng: 0.00000</div>
+
+        <div id="resizeBar"></div>
+
+        <div id="panelInferior" class="glass-panel">
+            <div class="tabs-header">
+                <button class="tab-btn active" data-target="tab-consulta"><i class="fa-solid fa-layer-group"></i> Consulta</button>
+                <button class="tab-btn" data-target="tab-tabla"><i class="fa-solid fa-table"></i> Tabla de Atributos</button>
+                <button class="tab-btn" data-target="tab-dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+                <button class="tab-btn" data-target="tab-archivos"><i class="fa-solid fa-upload"></i> Carga Local</button>
+            </div>
+
+            <div class="tab-content active" id="tab-consulta">
+                <div class="control-group">
+                    <label for="selectorCapa"><b>Capa Activa:</b></label>
+                    <select id="selectorCapa" class="modern-select">
+                        <option value="" disabled selected>Esperando capas...</option>
+                    </select>
+                </div>
+                <div class="stats-mini" id="capaStats" style="margin-top: 10px;">Seleccione una capa para ver resumen.</div>
+            </div>
+
+            <div class="tab-content" id="tab-tabla">
+                <div class="table-toolbar">
+                    <input type="text" id="tableSearch" placeholder="Filtrar en tabla..." class="modern-input" style="width: 300px;">
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-primary" id="btnExportCSV"><i class="fa-solid fa-file-csv"></i> CSV</button>
+                        <button class="btn-primary" id="btnExportSHP" style="background-color: #27ae60;"><i class="fa-solid fa-file-zipper"></i> SHP</button>
+                    </div>
+                    <span id="tableCount" class="text-small">0 registros</span>
+                </div>
+                <div class="table-container" id="tablaContenido"></div>
+            </div>
+
+            <div class="tab-content" id="tab-dashboard">
+                <div class="dashboard-grid">
+                    <div class="kpi-card glass-panel">
+                        <h4>Total Entidades</h4>
+                        <h2 id="kpiTotal">0</h2>
+                    </div>
+                    <div class="kpi-card glass-panel">
+                        <h4>Atributos</h4>
+                        <h2 id="kpiCampos">0</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-archivos">
+                <div class="upload-zone" id="dropZone">
+                    <i class="fa-solid fa-cloud-arrow-up fa-3x"></i>
+                    <p>Arrastra archivos aquí o haz clic para subir</p>
+                    <p class="text-small text-muted">Soporta: GeoJSON, KML, GPX, SHP (.zip)</p>
+                    <input type="file" id="fileInput" accept=".geojson,.json,.kml,.gpx,.zip" hidden>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-draw/dist/leaflet.draw.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.js"></script>
+    <script src="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/3.0.0/Control.FullScreen.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
+    <script src="https://unpkg.com/@mapbox/togeojson"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script src="https://unpkg.com/@mapbox/shp-write@0.4.3/shpwrite.js"></script>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
